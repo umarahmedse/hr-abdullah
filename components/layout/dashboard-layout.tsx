@@ -5,8 +5,10 @@ import type React from "react"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { getCurrentUser, type User } from "@/lib/auth"
+import { getOnboardingState, setOnboardingCompleted, setOnboardingSkipped } from "@/lib/onboarding"
 import { Sidebar } from "./sidebar"
 import { Header } from "./header"
+import { OnboardingTour } from "@/components/onboarding/onboarding-tour"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -16,6 +18,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [showOnboarding, setShowOnboarding] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -25,8 +28,28 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       return
     }
     setUser(currentUser)
+
+    const onboardingState = getOnboardingState(currentUser.id)
+    if (!onboardingState.hasCompletedOnboarding) {
+      setShowOnboarding(true)
+    }
+
     setLoading(false)
   }, [router])
+
+  const handleOnboardingComplete = () => {
+    if (user) {
+      setOnboardingCompleted(user.id)
+      setShowOnboarding(false)
+    }
+  }
+
+  const handleOnboardingSkip = () => {
+    if (user) {
+      setOnboardingSkipped(user.id)
+      setShowOnboarding(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -45,7 +68,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="flex h-screen bg-background">
-      <div className="hidden md:block md:w-64 md:flex-shrink-0">
+      <div className="hidden md:block md:w-64 md:flex-shrink-0" id="sidebar">
         <Sidebar userRole={user.role} isOpen={false} onClose={() => setSidebarOpen(false)} />
       </div>
 
@@ -63,6 +86,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <Header user={user} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
       </div>
+
+      {showOnboarding && (
+        <OnboardingTour user={user} onComplete={handleOnboardingComplete} onSkip={handleOnboardingSkip} />
+      )}
     </div>
   )
 }

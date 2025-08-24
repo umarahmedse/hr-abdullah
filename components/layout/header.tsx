@@ -27,6 +27,14 @@ export function Header({ user, onToggleSidebar }: HeaderProps) {
     router.push("/")
   }
 
+  const handleProfileClick = () => {
+    router.push("/profile")
+  }
+
+  const handleSettingsClick = () => {
+    router.push("/settings")
+  }
+
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -57,7 +65,7 @@ export function Header({ user, onToggleSidebar }: HeaderProps) {
       <div className="flex items-center space-x-2 md:space-x-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+            <Button variant="ghost" className="relative h-8 w-8 rounded-full" id="user-avatar">
               <Avatar className="h-8 w-8">
                 <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
                 <AvatarFallback className="bg-primary text-primary-foreground">{getInitials(user.name)}</AvatarFallback>
@@ -75,11 +83,11 @@ export function Header({ user, onToggleSidebar }: HeaderProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleProfileClick}>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSettingsClick}>
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
             </DropdownMenuItem>

@@ -102,7 +102,7 @@ export default function DashboardPage() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between" id="dashboard-header">
           <div>
             <h1 className="text-3xl font-bold text-foreground">Analytics Dashboard</h1>
             <p className="text-muted-foreground">
@@ -115,7 +115,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Key Metrics */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4" id="metrics-grid">
           {stats.map((stat, index) => {
             const Icon = stat.icon
             return (
@@ -137,7 +137,7 @@ export default function DashboardPage() {
         {user?.role === "hr" ? (
           <div className="space-y-8">
             {/* Charts Section */}
-            <div className="grid gap-6 lg:grid-cols-2">
+            <div className="grid gap-6 lg:grid-cols-2" id="charts-section">
               {/* Department Performance */}
               <Card>
                 <CardHeader>
@@ -297,74 +297,71 @@ export default function DashboardPage() {
 
             <div className="space-y-6">
               {/* Department Overview Table */}
-             <Card>
-  <CardHeader>
-    <CardTitle className="flex items-center gap-2">
-      <Building2 className="h-5 w-5 text-blue-600" />
-      Department Overview
-    </CardTitle>
-    <CardDescription>
-      Comprehensive department metrics and performance indicators
-    </CardDescription>
-  </CardHeader>
-  <CardContent>
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Department</TableHead>
-          <TableHead className="text-center">Employees</TableHead>
-          <TableHead className="text-center">Performance</TableHead>
-          <TableHead className="text-center">Leave Usage</TableHead>
-          <TableHead className="text-center">Feedback</TableHead>
-          <TableHead className="text-center">Status</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {departmentMetrics.map((dept, index) => (
-          <TableRow key={index}>
-            <TableCell className="font-medium">{dept.name}</TableCell>
-            <TableCell className="text-center">{dept.employeeCount}</TableCell>
-            <TableCell className="text-center">
-              <Badge
-                variant={
-                  dept.avgPerformanceScore >= 4
-                    ? "default"
-                    : dept.avgPerformanceScore >= 3
-                    ? "secondary"
-                    : "destructive"
-                }
-              >
-                {dept.avgPerformanceScore}/5
-              </Badge>
-            </TableCell>
-            <TableCell className="text-center">
-              <div className="flex items-center justify-center gap-2">
-                <span>{dept.leaveUtilization}%</span>
-                <div className="w-16 h-2 bg-gray-200 rounded-full">
-                  <div
-                    className="h-2 bg-blue-500 rounded-full"
-                    style={{ width: `${Math.min(dept.leaveUtilization, 100)}%` }}
-                  />
-                </div>
-              </div>
-            </TableCell>
-            <TableCell className="text-center">{dept.feedbackCount}</TableCell>
-            <TableCell className="text-center">
-              <Badge variant={dept.avgPerformanceScore >= 4 ? "default" : "secondary"}>
-                {dept.avgPerformanceScore >= 4
-                  ? "Excellent"
-                  : dept.avgPerformanceScore >= 3
-                  ? "Good"
-                  : "Needs Attention"}
-              </Badge>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </CardContent>
-</Card>
-
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Building2 className="h-5 w-5 text-blue-600" />
+                    Department Overview
+                  </CardTitle>
+                  <CardDescription>Comprehensive department metrics and performance indicators</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Department</TableHead>
+                        <TableHead className="text-center">Employees</TableHead>
+                        <TableHead className="text-center">Performance</TableHead>
+                        <TableHead className="text-center">Leave Usage</TableHead>
+                        <TableHead className="text-center">Feedback</TableHead>
+                        <TableHead className="text-center">Status</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {departmentMetrics.map((dept, index) => (
+                        <TableRow key={index}>
+                          <TableCell className="font-medium">{dept.name}</TableCell>
+                          <TableCell className="text-center">{dept.employeeCount}</TableCell>
+                          <TableCell className="text-center">
+                            <Badge
+                              variant={
+                                dept.avgPerformanceScore >= 4
+                                  ? "default"
+                                  : dept.avgPerformanceScore >= 3
+                                    ? "secondary"
+                                    : "destructive"
+                              }
+                            >
+                              {dept.avgPerformanceScore}/5
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <div className="flex items-center justify-center gap-2">
+                              <span>{dept.leaveUtilization}%</span>
+                              <div className="w-16 h-2 bg-gray-200 rounded-full">
+                                <div
+                                  className="h-2 bg-blue-500 rounded-full"
+                                  style={{ width: `${Math.min(dept.leaveUtilization, 100)}%` }}
+                                />
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-center">{dept.feedbackCount}</TableCell>
+                          <TableCell className="text-center">
+                            <Badge variant={dept.avgPerformanceScore >= 4 ? "default" : "secondary"}>
+                              {dept.avgPerformanceScore >= 4
+                                ? "Excellent"
+                                : dept.avgPerformanceScore >= 3
+                                  ? "Good"
+                                  : "Needs Attention"}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
 
               {/* Recent Activities Table */}
               <Card>
@@ -533,7 +530,7 @@ export default function DashboardPage() {
           // Employee Dashboard
           <div className="grid gap-6 md:grid-cols-2">
             {/* Personal Performance */}
-            <Card>
+            <Card id="performance-card">
               <CardHeader>
                 <CardTitle>My Performance</CardTitle>
                 <CardDescription>Your latest performance metrics</CardDescription>
@@ -564,7 +561,7 @@ export default function DashboardPage() {
             </Card>
 
             {/* Leave Balance */}
-            <Card>
+            <Card id="leave-card">
               <CardHeader>
                 <CardTitle>Leave Balance</CardTitle>
                 <CardDescription>Your available leave days</CardDescription>
